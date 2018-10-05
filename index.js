@@ -40,7 +40,7 @@ server.get('/api/actions', (req, res) => {
 // Add new action to project
 server.post('/api/actions', (req, res) => {
     const action = {
-        "project_id": req.body.project_id,
+        "project_id": parseInt(req.body.project_id),
         "description": req.body.description,
         "notes": req.body.notes
     }
@@ -81,7 +81,7 @@ server.post('/api/actions', (req, res) => {
 // Delete action by ID
 
 server.delete('/api/actions/:id', (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
     actionsDb.remove(id)
     .then(reply => {
@@ -94,7 +94,32 @@ server.delete('/api/actions/:id', (req, res) => {
     })
 })
 
-//TODO: PUT
+// Update Action by ID
+
+server.put('/api/actions/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    const newAction = {
+        "description": req.body.description,
+        "notes": req.body.notes
+    }
+
+    actionsDb.update(id, newAction)
+    .then(action => {
+        if(!action){
+            return res.status(404).json({error: "The specified action does not exist."})
+        } else if(!newAction.description || !newAction.notes){
+            return res.status(400).json({error: "Please include a description and notes."})
+        } else {
+            return res.status(200).json({action})
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: `An error occured while updating Action ${id}`})
+    })
+})
+
+
 
 
 /****************************************************************************************************/
@@ -110,6 +135,23 @@ server.get('/api/projects', (req, res) => {
     .catch(err => {
         console.log(err);
         return res.status(500).json({error: "Error retrieving projects."})
+    })
+})
+
+// Get project by ID
+server.get('/api/projects/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+    projectsDb.get(id)
+    .then(project => {
+        if(!project){
+            return res.status(404).json({error: `Project with ID ${id} does not exist.`})
+        } else {
+        return res.status(200).json({project})
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: `Error retrieving project ${id}`})
     })
 })
 
@@ -139,10 +181,10 @@ server.post('/api/projects', (req, res) => {
     })
 })
 
-//TODO: DELETE
+// Delete project by ID
 
 server.delete('/api/projects/:id', (req, res) => {
-    const id = req.params.id;
+    const id = parseInt(req.params.id);
 
     projectsDb.remove(id)
     .then(reply => {
@@ -155,9 +197,57 @@ server.delete('/api/projects/:id', (req, res) => {
     })
 })
 
-//TODO: PUT
+// Update project by ID
 
-//TODO: Get actions for project by ID
+server.put('/api/projects/:id', (req, res) => {
+    const id = parseInt(req.params.id);
+
+    const newProject = {
+        "name": req.body.name,
+        "description": req.body.description
+    }
+
+    projectsDb.update(id, newProject)
+    .then(project => {
+        if(!project){
+            return res.status(404).json({error: "The specified project does not exist."})
+        } else if (!newProject.name || !newProject.description){
+            return res.status(400).json({error: "Please include a name and description."})
+        } else {
+        console.log(project);
+        return res.status(200).json({message: "Project successfully updated."})
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: `An error occured while attempting to update Project ${id}`})
+    })
+})
+
+// Get actions for project by ID
+
+server.get('/api/projects/:id/actions', (req, res) => {
+    const project_id = parseInt(req.params.id);
+    let actions_array = [];
+
+    actionsDb.get()
+    .then(actions => {
+        actions.map(action => {
+            if(action.project_id === project_id){
+                actions_array.push(action);
+            }
+        })
+        if(actions_array.length === 0){
+            return res.status(200).json({message: `No actions found for Project ${project_id}`})
+        } else {
+        return res.status(200).json({actions_array});
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: `An error occured while getting actions for project ${project_id}`})
+    })
+})
 
 
 
