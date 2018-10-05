@@ -21,9 +21,11 @@ function logger (req, res, next){
 
 server.use(logger);
 
+/****************************************************************************************************/
 /*** Actions Methods ***/
+/****************************************************************************************************/
 
-//TODO: GET
+// Get all actions
 server.get('/api/actions', (req, res) => {
     actionsDb.get()
     .then(actions => {
@@ -35,7 +37,7 @@ server.get('/api/actions', (req, res) => {
     })
 })
 
-//TODO: POST
+// Add new action to project
 server.post('/api/actions', (req, res) => {
     const action = {
         "project_id": req.body.project_id,
@@ -74,17 +76,32 @@ server.post('/api/actions', (req, res) => {
         return res.status(500).json({error: `Error finding project with ID ${action.project_id}`})
     })
     
-    
 })
 
-//TODO: DELETE
+// Delete action by ID
+
+server.delete('/api/actions/:id', (req, res) => {
+    const id = req.params.id;
+
+    actionsDb.remove(id)
+    .then(reply => {
+        console.log(reply);
+        return res.status(200).json({message: "Action successfully deleted."})
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: `An error occured while attempting to delete Action ${id}`})
+    })
+})
 
 //TODO: PUT
 
 
+/****************************************************************************************************/
 /*** Projects Methods ***/
+/****************************************************************************************************/
 
-//TODO: GET
+// Get all projects
 server.get('/api/projects', (req, res) => {
     projectsDb.get()
     .then(projects => {
@@ -96,7 +113,7 @@ server.get('/api/projects', (req, res) => {
     })
 })
 
-//TODO: POST
+// Add new project
 server.post('/api/projects', (req, res) => {
     const project = {
         "name": req.body.name,
@@ -124,8 +141,23 @@ server.post('/api/projects', (req, res) => {
 
 //TODO: DELETE
 
+server.delete('/api/projects/:id', (req, res) => {
+    const id = req.params.id;
+
+    projectsDb.remove(id)
+    .then(reply => {
+        console.log(reply);
+        return res.status(200).json({message: "Project successfully deleted."})
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: `An error occured while attempting to delete Project ${id}`})
+    })
+})
+
 //TODO: PUT
 
+//TODO: Get actions for project by ID
 
 
 
