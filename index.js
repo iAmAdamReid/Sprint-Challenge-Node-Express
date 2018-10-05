@@ -36,6 +36,46 @@ server.get('/api/actions', (req, res) => {
 })
 
 //TODO: POST
+server.post('/api/actions', (req, res) => {
+    const action = {
+        "project_id": req.body.project_id,
+        "description": req.body.description,
+        "notes": req.body.notes
+    }
+
+    if(action.description.length > 128){
+        return res.status(413).json({error: "Description contains too many characters."})
+    }
+
+    if(!action.project_id || !action.description || !action.notes){
+        return res.status(400).json({error: "New actions must contain a project ID, a description, and notes."})
+    }
+
+    // check to see if project exists
+    projectsDb.get(action.project_id)
+    .then(reply => {
+        console.log(reply);
+        if(!reply){
+            return res.status(404).json({error: "No project with that ID was found."})
+        } else {
+            actionsDb.insert(action)
+            .then(reply => {
+                console.log(reply);
+                return res.status(201).json("Action successfully added.");
+            })
+            .catch(err => {
+                console.log(err);
+                return res.status(500).json({error: "Error adding action."})
+            })
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: `Error finding project with ID ${action.project_id}`})
+    })
+    
+    
+})
 
 //TODO: DELETE
 
@@ -57,6 +97,30 @@ server.get('/api/projects', (req, res) => {
 })
 
 //TODO: POST
+server.post('/api/projects', (req, res) => {
+    const project = {
+        "name": req.body.name,
+        "description": req.body.description
+    }
+
+    if(project.name.length > 128){
+        return res.status(413).json({error: "Name contains too many characters."})
+    }
+
+    if(project.name.length === 0 || project.description.length === 0){
+        return res.status(400).json({error: "Project must have a name and description."})
+    }
+
+    projectsDb.insert(project)
+    .then(reply => {
+        console.log(reply);
+        return res.status(201).json({message: "Project successfully added."});
+    })
+    .catch(err => {
+        console.log(err);
+        return res.status(500).json({error: "Error adding project."})
+    })
+})
 
 //TODO: DELETE
 
