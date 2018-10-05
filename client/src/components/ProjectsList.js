@@ -1,7 +1,7 @@
 import React from 'react';
 import {fetchProjects} from '../actions/index';
 import {connect} from 'react-redux';
-import {Switch, withRouter, Route, Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import Project from './Project';
 
 class ProjectsList extends React.Component {

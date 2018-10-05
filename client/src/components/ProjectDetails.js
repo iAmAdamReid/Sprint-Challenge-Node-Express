@@ -24,7 +24,10 @@ class ProjectDetails extends React.Component {
             <div className = 'project-details'>
             <h1>{this.props.currentProject.name}</h1>
             <h2>{this.props.currentProject.description}</h2>
-
+            <div className = 'project-actions'>
+            <h3>ACTIONS:</h3>
+            <p>Coming Soon...</p>
+            </div>
             </div>
         )
     }

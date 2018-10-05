@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {connect} from 'react-redux';
 import {Switch, withRouter, Route, Link} from 'react-router-dom';
@@ -14,7 +13,7 @@ class App extends Component {
       <div className="App">
       <div className = 'navigation'>
       <Link to ='/' className = 'nav-link'>Home</Link>
-      <Link to = '/projects/form' className = 'nav-link'>Add New Project</Link>
+      <Link to = '/forms/projects' className = 'nav-link'>Add New Project</Link>
       </div>
 
        <div className = 'application'>
@@ -22,15 +21,23 @@ class App extends Component {
       <Switch>
         <Route exact path = '/' render={(props) => {
           return (
-            <div>
+            
               <ProjectsList {...props}></ProjectsList>
-            </div>
+            
           )
         }} />
 
         <Route exact path = '/projects/:id' render={(props) => {
           return (
             <ProjectDetails {...props} />
+          )
+        }} />
+
+        <Route exact path = '/forms/projects' render ={(props) => {
+          return (
+            <div>
+              Form Coming Soon...
+            </div>
           )
         }} />
         
