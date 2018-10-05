@@ -1,0 +1,29 @@
+{
+  "name": "sprint-challenge-node-express",
+  "version": "1.0.0",
+  "description": "Lambda School - Node Express Sprint Challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iAmAdamReid/Sprint-Challenge-Node-Express.git"
+  },
+  "author": "Adam Reid",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cors": "^2.8.4",
+    "knex": "^0.15.2",
+    "sqlite3": "^4.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  },
+  "bugs": {
+    "url": "https://github.com/iAmAdamReid/Sprint-Challenge-Node-Express/issues"
+  },
+  "homepage": "https://github.com/iAmAdamReid/Sprint-Challenge-Node-Express#readme"
+}
