@@ -145,7 +145,7 @@ server.get('/api/projects/:id', (req, res) => {
         if(!project){
             return res.status(404).json({error: `Project with ID ${id} does not exist.`})
         } else {
-        return res.status(200).json({project})
+        return res.status(200).json(project)
         }
     })
     .catch(err => {
